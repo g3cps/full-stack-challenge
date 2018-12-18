@@ -9,6 +9,7 @@ module.exports = {
    */
   getEmployee: (req, res, next) => {
     Employee.findById(req.params.id)
+      .populate('supervisor')
       .exec((err, employee) => {
         if (err)
           res.send(err);
@@ -34,11 +35,14 @@ module.exports = {
       if (query.employeeNumber) {
         transformedQuery.employeeNumber = query.employeeNumber;
       }
+      if (query.title) {
+        transformedQuery.title = {$regex: query.title, $options: 'i'};
+      }
       if (query.firstName) {
         transformedQuery.firstName = {$regex: query.firstName, $options: 'i'};
       }
       if (query.lastName) {
-        transformedQuery.lastName = {$regex: query.LastName, $options: 'i'};
+        transformedQuery.lastName = {$regex: query.lastName, $options: 'i'};
       }
     }
 
@@ -73,8 +77,7 @@ module.exports = {
    * @param next
    */
   create: (req, res, next) => {
-    const {firstName, lastName, startDate, supervisorId} = req.body;
-    const employee = new Employee({firstName, lastName, startDate, supervisorId});
+    const employee = new Employee(req.body);
     employee.save((err, employee) => {
         if (err)
           res.send(err);

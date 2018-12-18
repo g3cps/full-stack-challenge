@@ -13,18 +13,20 @@ const Employee = require('../models/employee');
 
 /**
  * Seed an amount of employees. If a list of supervisor ids is provided, employees will be equally split to report to
+ * @param title: Title for the employees
  * @param amount: Amount of employees to seed
  * @param supervisorIds: A list of supervisors
  */
-const generateEmployees = (amount = 2, supervisorIds = []) => {
+const generateEmployees = (title = 'Manager', amount = 2, supervisorIds = []) => {
   const { length } = supervisorIds;
   let saves = [];
   for (let x = 0; x < amount; x++) {
     const data = new Employee({
+      title,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       startDate: new Date(),
-      supervisorId: length ? supervisorIds[x % length] : undefined // assign supervisor based on index of the employee
+      supervisor: length ? supervisorIds[x % length] : undefined // assign supervisor based on index of the employee
     });
     saves.push(data.save());
   }
@@ -35,10 +37,12 @@ const generateEmployees = (amount = 2, supervisorIds = []) => {
  * Main seeder function
  */
 const run = () =>
+  // generate supervisors first
   Promise.all(generateEmployees())
     .then((values) => {
       const supervisorIds = values.map((employee) => employee._id);
-      return Promise.all(generateEmployees(10, supervisorIds));
+      // now create some developers and assign a supervisors to each of them
+      return Promise.all(generateEmployees('Developer', 10, supervisorIds));
     });
 
 // run the seeder...

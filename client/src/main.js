@@ -6,13 +6,18 @@ import BootstrapVue from 'bootstrap-vue'
 import VueLodash from 'vue-lodash'
 import VeeValidate from 'vee-validate'
 import router from './router'
+import VueRouterUserRoles from 'vue-router-user-roles'
 import store from './stores'
+import {ServerTable, Event} from 'vue-tables-2'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.use(BootstrapVue)
 Vue.use(VueLodash)
 Vue.use(VeeValidate)
+Vue.use(ServerTable)
+Vue.use(Event)
+Vue.use(VueRouterUserRoles, {router})
 
 Vue.config.productionTip = false
 

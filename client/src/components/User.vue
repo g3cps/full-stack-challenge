@@ -33,7 +33,6 @@
               v-model="userModel.firstName",
               placeholder="First Name",
               v-validate="'required'",
-              :disabled="isUserAdmin"
             )
             span.help.text-danger(v-show="errors.has('firstName')") {{ errors.first('firstName') }}
           b-form-group(
@@ -49,9 +48,23 @@
               v-model="userModel.lastName",
               placeholder="Last Name",
               v-validate="'required'",
-              :disabled="isUserAdmin"
             )
             span.help.text-danger(v-show="errors.has('lastName')") {{ errors.first('lastName') }}
+          b-form-group(
+            id="titleGroup",
+            label="Title",
+            label-for="title"
+          )
+            b-form-input(
+              :class="{'is-invalid': errors.has('title') }"
+              id="lastName",
+              name="title",
+              type="text",
+              v-model="userModel.title",
+              placeholder="Title",
+              v-validate="'required'",
+            )
+            span.help.text-danger(v-show="errors.has('title')") {{ errors.first('title') }}
           b-form-group(
             id="startDateGroup",
             label="Start Date",
@@ -65,44 +78,42 @@
               v-model="userModel.startDate",
               placeholder="Start Date",
               v-validate="'required'",
-              :disabled="isUserAdmin"
             )
             span.help.text-danger(v-show="errors.has('startDate')") {{ errors.first('startDate') }}
-          button.btn.btn-primary.btn-block(type="submit", :disabled="isUserAdmin") Save
+          button.btn.btn-primary.btn-block(type="submit") Save
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import EmployeeService from '../services/EmployeeService'
 
 export default {
   name: 'User',
+  props: ['userProp'],
   data () {
     return {
       userModel: {}
     }
   },
   mounted () {
-    this.userModel = this._.cloneDeep(this.user)
+    this.userModel = this._.cloneDeep(this.userProp)
   },
   computed: {
-    /**
-     * True when user model is admin
-     * @returns {boolean}
-     */
-    isUserAdmin () {
-      return this.userModel.id === 'admin'
-    },
     ...mapGetters({
       isLoggedIn: 'user/isLoggedIn',
-      isAdmin: 'user/isAdmin',
-      user: 'user/getUser'
+      isAdmin: 'user/isAdmin'
     })
   },
   methods: {
     onSubmit (e) {
       e.preventDefault()
-      this.$validator.validateAll().then((result) => {
-        console.log(result)
+      this.$validator.validateAll().then((valid) => {
+        if (valid) {
+          EmployeeService.saveEmployee(this.userModel)
+            .then(({data}) => {
+              this.$router.push({name: 'Employee Edit', params: {id: data._id}})
+            })
+        }
       })
     }
   }

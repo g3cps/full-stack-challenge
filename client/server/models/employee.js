@@ -12,11 +12,15 @@ let EmployeeSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    title: {
+      type: String,
+      required: true
+    },
     startDate: {
       type: Date,
       required: true
     },
-    supervisorId: {
+    supervisor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Employee'
     },
