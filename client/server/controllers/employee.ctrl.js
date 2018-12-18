@@ -31,10 +31,13 @@ module.exports = {
     let sort = {};
 
     if (req.url !== '/employee') {
-      if (query.firstName && query.firstName.length) {
+      if (query.employeeNumber) {
+        transformedQuery.employeeNumber = query.employeeNumber;
+      }
+      if (query.firstName) {
         transformedQuery.firstName = {$regex: query.firstName, $options: 'i'};
       }
-      if (query.lastName && query.lastName.length) {
+      if (query.lastName) {
         transformedQuery.lastName = {$regex: query.LastName, $options: 'i'};
       }
     }
@@ -42,6 +45,8 @@ module.exports = {
     let {limit, page, sortBy, sortDir} = query;
     if (!limit) {
       limit = 10;
+    } else {
+      limit = parseInt(limit, 0)
     }
     if (!page) {
       page = 1;
@@ -77,6 +82,24 @@ module.exports = {
           res.send(employee);
         next();
       });
+  },
+  /**
+   * Update employee
+   * @param req
+   * @param res
+   * @param next
+   */
+  update: (req, res, next) => {
+    Employee.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {new: true},
+      (err, updated) => {
+        if (err) return res.statusCode(500).send(err);
+        res.send(updated);
+        next();
+      }
+    );
   },
   /**
    * Delete a current employee

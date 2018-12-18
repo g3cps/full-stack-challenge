@@ -23,6 +23,13 @@ module.exports = (router) => {
     .post(employeeController.create);
 
   /**
+   * update a new employee
+   */
+  router
+    .route('/employee/:id')
+    .put(employeeController.update);
+
+  /**
    * delete an employee
    */
   router
