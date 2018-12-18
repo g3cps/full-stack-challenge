@@ -1,10 +1,12 @@
 <template lang="pug">
   div
-    strong.mr-2 Current Supervisor:
-    span {{user.supervisor ? user.supervisor.firstName + ' ' + user.supervisor.lastName + ', ' + user.supervisor.title : 'N/A'}}
+    div
+      strong.mr-2 Current Supervisor:
+      span {{user.supervisor ? user.supervisor.firstName + ' ' + user.supervisor.lastName + ', ' + user.supervisor.title : 'N/A'}}
+      button.btn.btn-sm.btn-danger.ml-2(v-if="user.supervisor", @click="select()") Remove
     v-server-table(:columns="columns", :options="options")
       template(slot="select", slot-scope="props")
-        button.btn.btn-primary(v-if="props.row._id !== user.supervisor._id", @click="select(props.row)") Select
+        button.btn.btn-primary(v-if="!user.supervisor || props.row._id !== user.supervisor._id", @click="select(props.row)") Select
         span(v-else) Selected
 </template>
 
@@ -55,10 +57,11 @@ export default {
   methods: {
     select (supervisor) {
       let params = this._.cloneDeep(this.user)
-      params.supervisor = supervisor._id
+      params.supervisor = supervisor ? supervisor._id : undefined
       EmployeeService.saveEmployee(params)
         .then(() => {
-          this.user.supervisor = supervisor
+          params.supervisor = supervisor || undefined
+          this.$emit('saved', params)
         })
     }
   }

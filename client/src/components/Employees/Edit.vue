@@ -2,15 +2,18 @@
   div
     h1 {{isEdit ? 'Edit' : 'Create'}} Employee
     .row
+      .col-md-8
+        router-link.float-right(:to="{ name: 'Employees'}") Back
+    .row
       .col-md-12
-        User(v-if="!isLoading", :user-prop="employee")
+        User(v-if="!isLoading", :user-prop="employee", @saved="setUser")
     .row
       .col-md-8
         hr
-    .row
+    .row(v-if="id")
       .col-md-8.col-sm-12
         h2 Select Supervisor
-        SupervisorAssignment(v-if="!isLoading", :user="employee")
+        SupervisorAssignment(v-if="!isLoading", :user="employee", @saved="setUser")
 </template>
 
 <script>
@@ -55,6 +58,9 @@ export default {
   methods: {
     formatDate (dateString) {
       return new Moment(dateString).format('YYYY-MM-DD')
+    },
+    setUser (user) {
+      this.employee = user
     }
   }
 }

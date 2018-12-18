@@ -111,6 +111,7 @@ export default {
         if (valid) {
           EmployeeService.saveEmployee(this.userModel)
             .then(({data}) => {
+              this.$emit('saved', data)
               this.$router.push({name: 'Employee Edit', params: {id: data._id}})
             })
         }
