@@ -23,7 +23,7 @@ module.exports = (router) => {
     .post(employeeController.create);
 
   /**
-   * update a new employee
+   * update an employee
    */
   router
     .route('/employee/:id')
