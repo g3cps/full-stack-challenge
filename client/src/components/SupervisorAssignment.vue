@@ -70,15 +70,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  #user-img-container {
-    width: 250px;
-  }
-  .user-img {
-    width: 200px;
-    height: 200px;
-  }
-  #user-form {
-    min-width: 400px;
-    width: calc(100% - 250px);
-  }
 </style>
