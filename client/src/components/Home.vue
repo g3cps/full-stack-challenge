@@ -3,7 +3,7 @@
     h1 Welcome {{user.firstName}}!
     div(v-if="!isLoggedIn")
       h2 Please Login to Begin
-    .mt-5(v-else)
+    .mt-5(v-else-if="!isAdmin")
       User(:user-prop="this.user")
 
 </template>
@@ -27,7 +27,8 @@ export default {
   },
   computed: mapGetters({
     isLoggedIn: 'user/isLoggedIn',
-    user: 'user/getUser'
+    user: 'user/getUser',
+    isAdmin: 'user/isAdmin'
   }),
   methods: {
   }

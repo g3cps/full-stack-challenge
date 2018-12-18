@@ -14,11 +14,11 @@
       hr
       ul.nav.flex-column
         li.nav-item
-          a.nav-link(href='#') Link
+          router-link.nav-link(:to="{name: 'Home'}") My Profile
         li.nav-item
-          a.nav-link(href='#') Link
+          router-link.nav-link(v-if="isAdmin", :to="{name: 'Employees'}") Manage Employees
         li.nav-item
-          a.nav-link.disabled(href='#') Disabled
+          router-link.nav-link(:to="{name: 'Employees'}") Performance Reviews
     #main.pt-5
       router-view
 </template>
