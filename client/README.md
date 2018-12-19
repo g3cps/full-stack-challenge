@@ -40,6 +40,7 @@ At the root of the `server` directory, create a new file `.env` and follow `.env
 For the sake of this challenge, a `.env` will be included already.
 
 After everything is installed and environment file is setup, run `npm start` to start the backend API.
+Note: On windows machine you may see error `'.' is not recognized as an internal or external command,`. In this case instead of running `npm start`, run `./node_modules/nodemon/bin/nodemon.js src/app.js` directly instead. Then everything should work
 
 Run `npm run seed` to seed a some users.
 
