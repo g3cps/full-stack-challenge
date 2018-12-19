@@ -29,8 +29,7 @@ export default {
         requestFunction: (params) => {
           const sortDir = params.ascending ? 'asc' : 'desc'
           const sortBy = params.orderBy || 'employeeNumber'
-          const page = params.page
-          const {limit} = params
+          const {limit, page} = params
 
           return EmployeeService.fetchEmployees({
             sortDir,

@@ -37,6 +37,8 @@ module.exports = {
     let {limit, page, sortBy, sortDir} = query;
     if (!limit) {
       limit = 10;
+    } else {
+      limit = parseInt(limit, 0)
     }
     if (!page) {
       page = 1;
@@ -45,8 +47,15 @@ module.exports = {
       sort[sortBy] = sortDir;
     }
 
+    const option = {
+      page,
+      limit,
+      sort,
+      populate: ['reviewer', 'employee', 'createdBy']
+    };
+
     PerformanceReview
-      .paginate(transformedQuery, {page, limit, sort}, (err, reviews) => {
+      .paginate(transformedQuery, option, (err, reviews) => {
         if (err)
           res.send(err);
         else
@@ -61,8 +70,8 @@ module.exports = {
    * @param next
    */
   create: (req, res, next) => {
-    const {createdById, employeeId, rating, message} = req.body;
-    const review = new PerformanceReview({createdById, employeeId, rating, message, status: 'Incomplete'});
+    req.body.status = 'Incomplete';
+    const review = new PerformanceReview(req.body);
     review.save((err, review) => {
       if (err)
         res.send(err);

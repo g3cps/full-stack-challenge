@@ -12,13 +12,13 @@
           div.mt-2
             button.btn.btn-primary(@click="login()") Logout
       hr
-      ul.nav.flex-column
+      ul.nav.flex-column(v-if="isLoggedIn")
         li.nav-item
           router-link.nav-link(:to="{name: 'Home'}") My Profile
         li.nav-item
           router-link.nav-link(v-if="isAdmin", :to="{name: 'Employees'}") Manage Employees
         li.nav-item
-          router-link.nav-link(:to="{name: 'Employees'}") Performance Reviews
+          router-link.nav-link(:to="{name: 'Performance Reviews'}") Performance Reviews
     #main.pt-5
       router-view
 </template>
@@ -47,16 +47,18 @@ export default {
           this.$store.commit({
             type: 'user/login',
             userData: {
-              id: 'admin',
+              _id: 'admin',
               firstName: 'Admin',
               lastName: 'User'
             }
           })
           break
         case ('employee'):
+          this.$router.push({name: 'Employees'})
           // go to list view and select employee to login
           break
         default:
+          this.$router.push({name: 'Home'})
           this.$store.commit({
             type: 'user/logout'
           })

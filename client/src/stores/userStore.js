@@ -5,10 +5,10 @@ export default {
   },
   getters: {
     isLoggedIn (state) {
-      return !!state.data.id
+      return !!state.data._id
     },
     isAdmin (state) {
-      return state.data.id === 'admin'
+      return state.data._id === 'admin'
     },
     getUser (state) {
       return state.data

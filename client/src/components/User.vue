@@ -63,6 +63,7 @@
               v-model="userModel.title",
               placeholder="Title",
               v-validate="'required'",
+              :disabled="!isAdmin"
             )
             span.help.text-danger(v-show="errors.has('title')") {{ errors.first('title') }}
           b-form-group(
@@ -78,6 +79,7 @@
               v-model="userModel.startDate",
               placeholder="Start Date",
               v-validate="'required'",
+              :disabled="!isAdmin"
             )
             span.help.text-danger(v-show="errors.has('startDate')") {{ errors.first('startDate') }}
           button.btn.btn-primary.btn-block(type="submit") Save
@@ -86,6 +88,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import EmployeeService from '../services/EmployeeService'
+import Moment from 'moment'
 
 export default {
   name: 'User',
@@ -97,6 +100,7 @@ export default {
   },
   mounted () {
     this.userModel = this._.cloneDeep(this.userProp)
+    this.userModel.startDate = new Moment(this.userModel.startDate).format('YYYY-MM-DD')
   },
   computed: {
     ...mapGetters({

@@ -35,6 +35,9 @@ module.exports = {
       if (query.employeeNumber) {
         transformedQuery.employeeNumber = query.employeeNumber;
       }
+      if (query.supervisor) {
+        transformedQuery.supervisor = query.supervisor;
+      }
       if (query.title) {
         transformedQuery.title = {$regex: query.title, $options: 'i'};
       }
@@ -98,6 +101,7 @@ module.exports = {
       req.body,
       {new: true},
       (err, updated) => {
+        // Update reviewer for all performance reviews if supervisor changed
         if (err) return res.statusCode(500).send(err);
         res.send(updated);
         next();

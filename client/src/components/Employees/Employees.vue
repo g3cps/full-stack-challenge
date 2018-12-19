@@ -4,11 +4,12 @@
       h1 Employees
       v-server-table(:columns="columns", :options="options")
         template(slot="filter__view")
-          button.btn.btn-primary(@click="viewEmployee({id: undefined})") Create
+          button.btn.btn-primary(v-if="isAdmin", @click="viewEmployee({id: undefined})") Create
         template(slot="startDate", slot-scope="props")
           span {{formatDate(props.row.startDate)}}
         template(slot="view", slot-scope="props")
-          button.btn.btn-primary(@click="viewEmployee({id: props.row._id})") View
+          button.btn.btn-primary(v-if="isAdmin", @click="viewEmployee({id: props.row._id})") View
+          button.btn.btn-primary(v-if="!isLoggedIn", @click="loginAs(props.row)") Login As
 </template>
 
 <script>
@@ -30,8 +31,7 @@ export default {
         requestFunction: (params) => {
           const sortDir = params.ascending ? 'asc' : 'desc'
           const sortBy = params.orderBy || 'employeeNumber'
-          const page = params.page
-          const {limit} = params
+          const {limit, page} = params
 
           return EmployeeService.fetchEmployees({
             sortDir,
@@ -52,12 +52,20 @@ export default {
   computed: {
     ...mapGetters({
       isLoggedIn: 'user/isLoggedIn',
-      user: 'user/getUser'
+      user: 'user/getUser',
+      isAdmin: 'user/isAdmin'
     })
   },
   methods: {
     viewEmployee (params = {}) {
       this.$router.push({name: 'Employee Edit', params})
+    },
+    loginAs (userData) {
+      this.$store.commit({
+        type: 'user/login',
+        userData
+      })
+      this.$router.push({name: 'Home'})
     },
     formatDate (date) {
       return new Moment(date).format('YYYY-MM-DD')

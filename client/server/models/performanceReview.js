@@ -3,13 +3,20 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 
 let PerformanceReviewSchema = new mongoose.Schema(
   {
-    createdById: {
+    createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Employee'
+      ref: 'Employee',
+      required: true
     },
-    employeeId: {
+    reviewer: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Employee'
+      ref: 'Employee',
+      required: true
+    },
+    employee: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Employee',
+      required: true
     },
     status: {
       type: String,
