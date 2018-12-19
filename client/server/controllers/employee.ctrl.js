@@ -92,17 +92,22 @@ module.exports = {
    * @param next
    */
   update: (req, res, next) => {
-    Employee.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {new: true},
-      (err, updated) => {
+    Employee.findById(req.params.id)
+      .exec((err, employee) => {
+        const {supervisor} = employee
         // Update reviewer for all performance reviews if supervisor changed
-        if (err) return res.statusCode(500).send(err);
-        res.send(updated);
-        next();
-      }
-    );
+        PerformanceReview.update({reviewer: supervisor}, {reviewer: req.body.supervisor}, {multi: true})
+          .then(() => {
+            employee.set(req.body)
+            employee.save((err, updated) => {
+              if (err)
+                res.send(err)
+              else
+                res.send(updated);
+              next();
+            })
+          });
+      })
   },
   /**
    * Delete a current employee

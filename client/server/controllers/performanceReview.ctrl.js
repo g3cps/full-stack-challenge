@@ -96,22 +96,18 @@ module.exports = {
    * @param next
    */
   update: (req, res, next) => {
-    PerformanceReview.findById(req.params.id, (err, review) => {
-      if (err) {
-        res.send(err);
+    PerformanceReview.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {new: true},
+      (err, review) => {
+        if (err)
+          res.send(err);
+        else {
+          res.send(review);
+        }
         next();
-      } else {
-        review.set(req.body);
-        review.save((err, updatedReview) => {
-          if (err)
-            res.send(err);
-          else {
-            res.send(updatedReview);
-          }
-          next();
-        });
-      }
-    });
+      });
   },
   /**
    * Delete a performance review
