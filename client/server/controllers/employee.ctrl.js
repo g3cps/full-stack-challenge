@@ -1,4 +1,6 @@
 const Employee = require('../models/employee');
+const PerformanceReview = require('../models/performanceReview');
+const Feedback = require('../models/feedback');
 
 module.exports = {
   /**
@@ -109,12 +111,23 @@ module.exports = {
    * @param next
    */
   deleteEmployee: (req, res, next) => {
-    Employee.findOneAndRemove({_id: req.params.id}, function(err) {
-      if (err)
-        res.send(err);
-      else
-        res.sendStatus(200);
-      next();
-    });
+    // Fix all relation with this employee, setting all to null
+    const promises = [
+      PerformanceReview.update({createdBy: req.params.id}, {createdBy: null}, {multi: true}),
+      PerformanceReview.update({reviewer: req.params.id}, {reviewer: null}, {multi: true}),
+      PerformanceReview.update({employee: req.params.id}, {employee: null}, {multi: true}),
+      Employee.update({supervisor: req.params.id}, {supervisor: null}, {multi: true}),
+      Feedback.update({creator: req.params.id}, {creator: null}, {multi: true}),
+    ];
+    Promise.all(promises)
+      .then(() => {
+        Employee.findOneAndRemove({_id: req.params.id}, function(err) {
+          if (err)
+            res.send(err);
+          else
+            res.sendStatus(200);
+          next();
+        });
+      });
   }
 };

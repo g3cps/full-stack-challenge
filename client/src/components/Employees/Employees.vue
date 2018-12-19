@@ -9,6 +9,7 @@
           span {{formatDate(props.row.startDate)}}
         template(slot="view", slot-scope="props")
           button.btn.btn-primary(v-if="isAdmin", @click="viewEmployee({id: props.row._id})") View
+          button.btn.btn-primary(v-if="isAdmin", @click="deleteEmployee(props.row._id)") Delete
           button.btn.btn-primary(v-if="!isLoggedIn", @click="loginAs(props.row)") Login As
 </template>
 
@@ -59,6 +60,9 @@ export default {
   methods: {
     viewEmployee (params = {}) {
       this.$router.push({name: 'Employee Edit', params})
+    },
+    deleteEmployee (id) {
+      EmployeeService.deleteEmployee(id)
     },
     loginAs (userData) {
       this.$store.commit({

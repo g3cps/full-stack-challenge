@@ -127,6 +127,7 @@ export default {
             message: this.messageInput,
             creator: this.user._id
           }).then(({data}) => {
+            data.creator = this.user
             this.messages.push(data)
             this.messageInput = ''
           })

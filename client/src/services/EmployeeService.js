@@ -11,5 +11,8 @@ export default {
     const method = params._id ? 'put' : 'post'
     const id = params._id
     return Api()[method](`employee${id ? '/' + id : ''}`, params)
+  },
+  deleteEmployee (id) {
+    return Api().delete(`employee/${id}`)
   }
 }
