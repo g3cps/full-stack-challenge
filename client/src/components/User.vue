@@ -15,7 +15,7 @@
               id="employeeNumber",
               name="employeeNumber",
               type="text",
-              v-model="userModel.employeeNumber",
+              v-model="userProp.employeeNumber",
               v-validate="'required'",
               disabled
             )
@@ -30,7 +30,7 @@
               id="firstName",
               name="firstName",
               type="text",
-              v-model="userModel.firstName",
+              v-model="userProp.firstName",
               placeholder="First Name",
               v-validate="'required'",
             )
@@ -45,7 +45,7 @@
               id="lastName",
               name="lastName",
               type="text",
-              v-model="userModel.lastName",
+              v-model="userProp.lastName",
               placeholder="Last Name",
               v-validate="'required'",
             )
@@ -60,7 +60,7 @@
               id="lastName",
               name="title",
               type="text",
-              v-model="userModel.title",
+              v-model="userProp.title",
               placeholder="Title",
               v-validate="'required'",
               :disabled="!isAdmin"
@@ -76,7 +76,7 @@
               id="startDate",
               name="startDate",
               type="date",
-              v-model="userModel.startDate",
+              v-model="userProp.startDate",
               placeholder="Start Date",
               v-validate="'required'",
               :disabled="!isAdmin"
@@ -93,14 +93,8 @@ import Moment from 'moment'
 export default {
   name: 'User',
   props: ['userProp'],
-  data () {
-    return {
-      userModel: {}
-    }
-  },
   mounted () {
-    this.userModel = this._.cloneDeep(this.userProp)
-    this.userModel.startDate = new Moment(this.userModel.startDate).format('YYYY-MM-DD')
+    this.userProp.startDate = new Moment(this.userProp.startDate).format('YYYY-MM-DD')
   },
   computed: {
     ...mapGetters({
@@ -113,9 +107,10 @@ export default {
       e.preventDefault()
       this.$validator.validateAll().then((valid) => {
         if (valid) {
-          EmployeeService.saveEmployee(this.userModel)
+          EmployeeService.saveEmployee(this.userProp)
             .then(({data}) => {
-              this.$emit('saved', data)
+              this.userProp._id = data._id
+              this.$emit('saved', this.userProp)
               this.$router.push({name: 'Employee Edit', params: {id: data._id}})
             })
         }

@@ -33,18 +33,22 @@ export default {
   data () {
     return {
       isLoading: true,
-      employee: null
+      employee: {}
     }
   },
   mounted () {
-    EmployeeService.getEmployee(this.id)
-      .then(({data}) => {
-        data.startDate = new Moment(data.startDate).format('YYYY-MM-DD')
-        this.employee = data
-      })
-      .finally(() => {
-        this.isLoading = false
-      })
+    if (this.id) {
+      EmployeeService.getEmployee(this.id)
+        .then(({data}) => {
+          data.startDate = new Moment(data.startDate).format('YYYY-MM-DD')
+          this.employee = data
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
+    } else {
+      this.isLoading = false
+    }
   },
   computed: {
     isEdit () {
