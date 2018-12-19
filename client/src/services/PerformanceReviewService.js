@@ -15,7 +15,7 @@ const resolveDeletedUser = (data, list = []) => {
         title: ''
       }
     }
-  });
+  })
 }
 
 export default {

@@ -2,14 +2,14 @@
   div
     .col-md-12
       h1 Employees
-      v-server-table(:columns="columns", :options="options")
+      v-server-table(:columns="columns", :options="options", ref="employeesTable")
         template(slot="filter__view")
           button.btn.btn-primary(v-if="isAdmin", @click="viewEmployee({id: undefined})") Create
         template(slot="startDate", slot-scope="props")
           span {{formatDate(props.row.startDate)}}
         template(slot="view", slot-scope="props")
           button.btn.btn-primary(v-if="isAdmin", @click="viewEmployee({id: props.row._id})") View
-          button.btn.btn-primary(v-if="isAdmin", @click="deleteEmployee(props.row._id)") Delete
+          button.btn.btn-danger.ml-2(v-if="isAdmin", @click="deleteEmployee(props.row._id)") Delete
           button.btn.btn-primary(v-if="!isLoggedIn", @click="loginAs(props.row)") Login As
 </template>
 
@@ -63,6 +63,7 @@ export default {
     },
     deleteEmployee (id) {
       EmployeeService.deleteEmployee(id)
+        .then(this.$refs.employeesTable.refresh)
     },
     loginAs (userData) {
       this.$store.commit({
