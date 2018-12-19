@@ -6,7 +6,8 @@
   "scripts": {
     "start": "./node_modules/nodemon/bin/nodemon.js src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "seed": "node seeders/employee.js"
+    "seed": "node seeders/index.js",
+    "dropCollection": "node seeders/dropDatabase.js"
   },
   "keywords": [],
   "author": "",
