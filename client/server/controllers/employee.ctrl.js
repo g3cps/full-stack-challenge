@@ -13,8 +13,6 @@ module.exports = {
       .exec((err, employee) => {
         if (err)
           res.send(err);
-        else if (!employee)
-          res.send(404);
         else
           res.send(employee);
         next();
@@ -31,22 +29,20 @@ module.exports = {
     let transformedQuery = {};
     let sort = {};
 
-    if (req.url !== '/employee') {
-      if (query.employeeNumber) {
-        transformedQuery.employeeNumber = query.employeeNumber;
-      }
-      if (query.supervisor) {
-        transformedQuery.supervisor = query.supervisor;
-      }
-      if (query.title) {
-        transformedQuery.title = {$regex: query.title, $options: 'i'};
-      }
-      if (query.firstName) {
-        transformedQuery.firstName = {$regex: query.firstName, $options: 'i'};
-      }
-      if (query.lastName) {
-        transformedQuery.lastName = {$regex: query.lastName, $options: 'i'};
-      }
+    if (query.employeeNumber) {
+      transformedQuery.employeeNumber = query.employeeNumber;
+    }
+    if (query.supervisor) {
+      transformedQuery.supervisor = query.supervisor;
+    }
+    if (query.title) {
+      transformedQuery.title = {$regex: query.title, $options: 'i'};
+    }
+    if (query.firstName) {
+      transformedQuery.firstName = {$regex: query.firstName, $options: 'i'};
+    }
+    if (query.lastName) {
+      transformedQuery.lastName = {$regex: query.lastName, $options: 'i'};
     }
 
     let {limit, page, sortBy, sortDir} = query;
@@ -66,8 +62,6 @@ module.exports = {
       .paginate(transformedQuery, {page, limit, sort}, (err, employees) => {
         if (err)
           res.send(err);
-        else if (!employees)
-          res.send(404);
         else
           res.send(employees);
         next();

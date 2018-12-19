@@ -6,7 +6,7 @@
     hr
     .col-md-12
       h2 Performance Review As Reviewer
-      router-link(:to="{name: 'Create Performance Reviews'}")
+      router-link(:to="{name: 'Create Performance Review'}")
         button.btn.btn-primary.mb-3 Create
       v-server-table(:columns="reviewerColumns", :options="reviwerOptions")
         template(slot="updatedAt", slot-scope="props")
@@ -100,7 +100,7 @@ export default {
       })
     },
     viewReview (id) {
-      console.log(id)
+      this.$router.push({name: 'View Performance Review', params: {id}})
     },
     formatDate (date) {
       return new Moment(date).format('YYYY-MM-DD')

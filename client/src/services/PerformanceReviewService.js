@@ -9,5 +9,14 @@ export default {
   },
   savePerformanceReview (params) {
     return Api().post('performanceReview', params)
+  },
+  setPerformanceReviewStatus (id, status) {
+    return Api().put(`performanceReview/${id}`, {status})
+  },
+  getFeedback (reviewId, params) {
+    return Api().get(`feedback/${reviewId}`, params)
+  },
+  submitFeedback (params) {
+    return Api().post('feedback', params)
   }
 }

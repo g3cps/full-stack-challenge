@@ -5,7 +5,8 @@ import Home from '../components/Home'
 import Employees from '../components/Employees/Employees'
 import EmployeeEdit from '../components/Employees/Edit'
 import PerformanceReviews from '../components/PerformanceReview/PerformanceReviews'
-import CreatePerformanceReviews from '../components/PerformanceReview/Create'
+import CreatePerformanceReview from '../components/PerformanceReview/Create'
+import ViewPerformanceReview from '../components/PerformanceReview/View'
 
 Vue.use(Router)
 
@@ -36,8 +37,14 @@ const router = new Router({
       meta: { restrictLoggedIn: true }
     }, {
       path: '/performanceReview/create',
-      name: 'Create Performance Reviews',
-      component: CreatePerformanceReviews,
+      name: 'Create Performance Review',
+      component: CreatePerformanceReview,
+      props: true,
+      meta: { restrictLoggedIn: true }
+    }, {
+      path: '/performanceReview/view/:id',
+      name: 'View Performance Review',
+      component: ViewPerformanceReview,
       props: true,
       meta: { restrictLoggedIn: true }
     }
@@ -49,6 +56,7 @@ router.beforeEach((to, from, next) => {
   const isLoggedIn = store.getters['user/isLoggedIn']
   const {restrictAdmin, restrictLoggedIn, restrictGuest} = to.meta
 
+  // Check if current user is allowed to access the page
   if ((restrictGuest && !isLoggedIn) || (restrictLoggedIn && isLoggedIn) || (restrictAdmin && isAdmin)) {
     next()
   } else {

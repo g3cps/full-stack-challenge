@@ -2,30 +2,21 @@ const Feedback = require('../models/feedback');
 
 module.exports = {
   /**
-   * Get a list of feedback. Newest first, 5 on each page.
+   * Get a list of feedback. Newest first.
    * @param req
    * @param res
    * @param next
    */
   index: (req, res, next) => {
-    const performanceReviewId = req.params.performanceReviewId;
-
-    let {page} = req.query;
-    if (!page) {
-      page = 1;
-    }
-
-    const limit = 5;
-    const sort = {
-      createdAt: 'desc'
-    };
-
-    Feedback
-      .paginate({performanceReviewId}, {page, limit, sort}, (err, reviews) => {
+    Feedback.find({
+      performanceReviewId: req.params.performanceReviewId
+    })
+      .populate('creator')
+      .exec((err, feedbacks) => {
         if (err)
           res.send(err);
         else
-          res.send(reviews);
+          res.send(feedbacks);
         next();
       });
   },

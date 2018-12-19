@@ -12,7 +12,7 @@ let FeedbackSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    creatorId: {
+    creator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Employee',
       required: true

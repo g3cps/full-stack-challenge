@@ -9,6 +9,9 @@ module.exports = {
    */
   get: (req, res, next) => {
     PerformanceReview.findById(req.params.id)
+      .populate('createdBy')
+      .populate('reviewer')
+      .populate('employee')
       .exec((err, performanceReview) => {
         if (err)
           res.send(err);
@@ -32,6 +35,12 @@ module.exports = {
 
     if (query.status) {
       transformedQuery.status = {$regex: query.status, $options: 'i'};
+    }
+    if (query.employee) {
+      transformedQuery.employee = query.employee
+    }
+    if (query.reviewer) {
+      transformedQuery.reviewer = query.reviewer
     }
 
     let {limit, page, sortBy, sortDir} = query;

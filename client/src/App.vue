@@ -15,9 +15,9 @@
       ul.nav.flex-column(v-if="isLoggedIn")
         li.nav-item
           router-link.nav-link(:to="{name: 'Home'}") My Profile
-        li.nav-item
-          router-link.nav-link(v-if="isAdmin", :to="{name: 'Employees'}") Manage Employees
-        li.nav-item
+        li.nav-item(v-if="isAdmin")
+          router-link.nav-link(:to="{name: 'Employees'}") Manage Employees
+        li.nav-item(v-if="!isAdmin")
           router-link.nav-link(:to="{name: 'Performance Reviews'}") Performance Reviews
     #main.pt-5
       router-view

@@ -2,7 +2,7 @@ const feedbackController = require('./../controllers/feedback.ctrl');
 
 module.exports = (router) => {
   /**
-   * get all performance reviews for a performance review
+   * get all feedback for a performance review
    */
   router
     .route('/feedback/:performanceReviewId')
